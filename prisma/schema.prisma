@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+
+  // Meta integration
+  meta          Meta?
+}
+
+model Meta {
+  id              String    @id @default(cuid())
+  sessionId       String    @unique
+  session         Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  // Meta user info
+  metaUserId      String
+  metaUserName    String?
+  metaEmail       String?
+
+  // Access tokens
+  accessToken     String    // Long-lived user access token
+  tokenExpiresAt  DateTime?
+
+  // Selected pixel info
+  pixelId         String
+  pixelName       String?
+  businessId      String?   // Meta Business account ID
+  adAccountId     String?   // Associated ad account
+
+  // Permissions granted
+  permissions     String    // JSON string of granted permissions array
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([sessionId])
+  @@index([pixelId])
+}

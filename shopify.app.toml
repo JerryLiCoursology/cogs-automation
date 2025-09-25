@@ -1,0 +1,41 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "cdd1da342ffa741b6268b5216f0f5062"
+name = "cogs-automation"
+application_url = "https://example.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+include_config_on_deploy = true
+
+[webhooks]
+api_version = "2025-10"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+# Temporarily commented out - these require app review for protected customer data
+# [[webhooks.subscriptions]]
+# topics = [ "orders/create" ]
+# uri = "/webhooks/orders/create"
+
+# [[webhooks.subscriptions]]
+# topics = [ "checkouts/create" ]
+# uri = "/webhooks/checkouts/create"
+
+# [[webhooks.subscriptions]]
+# topics = [ "customers/create" ]
+# uri = "/webhooks/customers/create"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products,read_customers,write_marketing_events,read_orders"
+
+[auth]
+redirect_urls = [ "https://example.com/api/auth" ]
